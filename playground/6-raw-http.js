@@ -1,7 +1,10 @@
 const http = require("http");
+require("dotenv").config();
+
+const access_token_WEATHER_API = process.env.WEATHER_API;
 
 const request = http.request(
-  `http://api.weatherapi.com/v1/current.json?key=d7ef0e0c4ce0408892184422211909&q=cairo&aqi=yes`,
+  `http://api.weatherapi.com/v1/current.json?key=${access_token_WEATHER_API}&q=cairo&aqi=yes`,
   (response) => {
     let data = "";
     response.on("data", (chunk) => {
