@@ -34,3 +34,5 @@ const transaction = (type, { label, stock = 0 } = {}) => {
 };
 
 transaction("order", product);
+
+transaction("order");
