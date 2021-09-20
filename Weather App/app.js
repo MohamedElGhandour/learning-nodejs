@@ -22,13 +22,13 @@ address
 
 // const request = require("request");
 // const weatherStack =
-//   "http://api.weatherstack.com/current?access_key=61fcdd847f2426be2a6f104a43d4750c&query=cairo";
+//   "http://api.weatherstack.com/current?access_key=&query=cairo";
 // const openweathermap =
-//   "https://api.openweathermap.org/data/2.5/weather?q=cairo&appid=4cad7b6a312b685d4e772422aa4db3e1";
+//   "https://api.openweathermap.org/data/2.5/weather?q=cairo&appid=";
 // const weatherapi =
-//   "http://api.weatherapi.com/v1/current.json?key=d7ef0e0c4ce04083892184422211909&q=cairo&aqi=yes";
+//   "http://api.weatherapi.com/v1/current.json?key=&q=cairo&aqi=yes";
 // const mapbox =
-//   "https://api.mapbox.com/geocoding/v5/mapbox.places/cairo.json?access_token=pk.eyJ1IjoibW9oYW1lZGVsZ2hhbmRvdXIxIiwiYSI6ImNrdHJuYzN1MzBxaWQydXFvNGxycGlmMXoifQ.zl_qTIO2qAjy44Hw7eJddA&limit=1";
+//   "https://api.mapbox.com/geocoding/v5/mapbox.places/cairo.json?access_token=&limit=1";
 
 // request({ url: weatherapi, json: true }, (err, res) => {
 // const parsing = JSON.parse(res.body);

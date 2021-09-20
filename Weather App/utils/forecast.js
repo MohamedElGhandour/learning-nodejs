@@ -1,8 +1,11 @@
 const request = require("request");
+require("dotenv").config();
+
+const access_token_WEATHER_API = process.env.WEATHER_API;
 
 const weather = (geocode, callback) => {
   const { latitude, longitude } = geocode;
-  const url = `http://api.weatherapi.com/v1/current.json?key=d7ef0e0c4ce04083892184422211909&q=${latitude},${longitude}&aqi=yes`;
+  const url = `http://api.weatherapi.com/v1/current.json?key=${access_token_WEATHER_API}&q=${latitude},${longitude}&aqi=yes`;
   request({ url, json: true }, (error, response) => {
     const { error: responseError, current } = response.body;
     if (error) {
