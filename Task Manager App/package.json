@@ -4,12 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Mohamed Elghandour",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^4.1.2"
+    "express": "^4.17.1",
+    "mongodb": "^4.1.2",
+    "mongoose": "^6.0.7",
+    "validator": "^13.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
   }
 }
