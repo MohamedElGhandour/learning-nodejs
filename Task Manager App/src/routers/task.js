@@ -1,9 +1,10 @@
 const express = require("express");
 const Task = require("../models/task");
 const router = new express.Router();
+const authMiddleware = require("../middleware/auth");
 
-router.post("/", async (request, response) => {
-  const task = new Task(request.body);
+router.post("/", authMiddleware, async (request, response) => {
+  const task = new Task({ ...request.body, owner: request.user._id });
   try {
     await task.save();
     response.json(task);
@@ -12,37 +13,23 @@ router.post("/", async (request, response) => {
   }
 });
 
-router.get("/", async (request, response) => {
+router.get("/", authMiddleware, async (request, response) => {
   try {
-    const task = await Task.find({});
-    response.json(task);
+    // const task = await Task.find({ owner: request.user._id });
+    await request.user.populate("tasks");
+    if (request.user.tasks.length === 0)
+      return response.status(404).send("Not Found");
+    response.json(request.user.tasks);
   } catch (error) {
-    response.status(400).json(error);
+    response.status(400).send(error.message);
   }
 });
 
-router.get("/:id", async (request, response) => {
+router.get("/:id", authMiddleware, async (request, response) => {
   try {
-    const task = await Task.findById(request.params.id);
-    if (!task) return response.status(404).send("Not Found");
-    response.json(task);
-  } catch (error) {
-    response.status(400).json(error);
-  }
-});
-
-router.patch("/:id", async (request, response) => {
-  const updates = Object.keys(request.body);
-  const allowedUpdates = ["description", "completed"];
-  const isValidOperation = updates.every((update) =>
-    allowedUpdates.includes(update)
-  );
-  if (!isValidOperation || updates.length === 0)
-    return response.status(400).send("Invalid updates!");
-  try {
-    const task = await Task.findByIdAndUpdate(request.params.id, request.body, {
-      new: true,
-      runValidators: true,
+    const task = await Task.findOne({
+      _id: request.params.id,
+      owner: request.user._id,
     });
     if (!task) return response.status(404).send("Not Found");
     response.json(task);
@@ -51,9 +38,40 @@ router.patch("/:id", async (request, response) => {
   }
 });
 
-router.delete("/:id", async (request, response) => {
+router.patch("/:id", authMiddleware, async (request, response) => {
+  const updates = Object.keys(request.body);
+  const allowedUpdates = ["description", "completed"];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation || updates.length === 0)
+    return response.status(400).send("Invalid updates!");
   try {
-    const task = await Task.findByIdAndDelete(request.params.id);
+    // const task = await Task.findById(request.params.id);
+    const task = await Task.findOne({
+      _id: request.params.id,
+      owner: request.user._id,
+    });
+    if (!task) return response.status(404).send("Not Found");
+    updates.forEach((update) => (task[update] = request.body[update]));
+    await task.save();
+    // const task = await Task.findByIdAndUpdate(request.params.id, request.body, {
+    //   new: true,
+    //   runValidators: true,
+    // });
+    response.json(task);
+  } catch (error) {
+    response.status(400).json(error);
+  }
+});
+
+router.delete("/:id", authMiddleware, async (request, response) => {
+  try {
+    // const task = await Task.findByIdAndDelete(request.params.id);
+    const task = await Task.findOneAndDelete({
+      _id: request.params.id,
+      owner: request.user._id,
+    });
     if (!task) return response.status(404).send("Not Found");
     response.json(task);
   } catch (error) {
