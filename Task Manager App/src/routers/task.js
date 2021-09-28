@@ -12,11 +12,31 @@ router.post("/", authMiddleware, async (request, response) => {
     response.status(400).json(error);
   }
 });
-
+//  GET /tasks?competed=true
+//  GET /tasks?limit=10&skip=10
 router.get("/", authMiddleware, async (request, response) => {
   try {
+    const match = {};
+    const sort = {};
+
+    if (request.query.completed)
+      match.completed = request.query.completed.toLowerCase() === "true";
+
+    if (request.query.sortBy) {
+      const parts = request.query.sortBy.split(":");
+      sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+    }
+
     // const task = await Task.find({ owner: request.user._id });
-    await request.user.populate("tasks");
+    await request.user.populate({
+      path: "tasks",
+      match,
+      options: {
+        limit: parseInt(request.query.limit),
+        skip: parseInt(request.query.skip),
+        sort,
+      },
+    });
     if (request.user.tasks.length === 0)
       return response.status(404).send("Not Found");
     response.json(request.user.tasks);
