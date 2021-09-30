@@ -17,6 +17,32 @@ app.listen(port, () => {
   console.log(`Server is up on ${port}`);
 });
 
+// const multer = require("multer");
+// const upload = multer({
+//   dest: "images",
+//   limits: {
+//     fileSize: 1000000,
+//   },
+//   fileFilter(req, file, callback) {
+//     // if (!file.originalname.endsWith(".pdf"))
+//     if (!file.originalname.match(/\.(doc|docx)$/))
+//       callback(new Error("File must be Word document"));
+//     callback(undefined, true);
+//     // callback(undefined, false);
+//   },
+// });
+
+// app.post(
+//   "/upload",
+//   upload.single("upload"),
+//   (request, response) => {
+//     response.send("Nice");
+//   },
+//   (error, req, res, next) => {
+//     res.status(400).send({ error: error.message });
+//   }
+// );
+
 // const Task = require("./models/task");
 // const User = require("./models/user");
 

@@ -2,7 +2,9 @@ const express = require("express");
 const User = require("../models/user");
 const router = new express.Router();
 const authMiddleware = require("../middleware/auth");
-const Task = require("../models/task");
+// const Task = require("../models/task");
+const multer = require("multer");
+const sharp = require("sharp");
 
 router.post("/", async (request, response) => {
   const user = new User(request.body);
@@ -96,6 +98,57 @@ router.delete("/profile", authMiddleware, async (request, response) => {
     response.json(request.user);
   } catch (error) {
     response.status(400).json(error);
+  }
+});
+
+const upload = multer({
+  // dest: "avatar",
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter(req, file, callback) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      callback(new Error("File must be jpg, jpeg, png"));
+    }
+    callback(undefined, true);
+  },
+});
+
+router.post(
+  "/avatar",
+  authMiddleware,
+  upload.single("avatar"),
+  async (request, response) => {
+    const buffer = await sharp(request.file.buffer)
+      .resize(250, 250)
+      .png()
+      .toBuffer();
+    request.user.avatar = buffer;
+    await request.user.save();
+    response.send(request.user);
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
+router.delete("/avatar", authMiddleware, async (request, response) => {
+  try {
+    request.user.avatar = undefined;
+    await request.user.save();
+    response.send(request.user);
+  } catch (error) {
+    response.status(400).json(error);
+  }
+});
+
+router.get("/:id/avatar", async (request, response) => {
+  try {
+    const user = await User.findById(request.params.id);
+    if (!user || !user.avatar) throw new Error("May be no user or avatar");
+    response.set("Content-Type", "image/png");
+    response.send(user.avatar);
+  } catch (error) {
+    response.status(400).json({ error: error.message });
   }
 });
 
