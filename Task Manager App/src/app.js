@@ -1,3 +1,5 @@
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../config/.env") });
 require("./db/mongoose");
 const express = require("express");
 const userRouter = require("./routers/user");
@@ -6,7 +8,7 @@ const authMiddleware = require("./middleware/auth");
 //
 const app = express();
 const bodyParser = express.json;
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 
 app.use(bodyParser());
 // app.use(authMiddleware);

@@ -3,6 +3,7 @@ const User = require("../models/user");
 const router = new express.Router();
 const authMiddleware = require("../middleware/auth");
 // const Task = require("../models/task");
+const { sendWelcomeEmail, sendCancelEmail } = require("../emails/account");
 const multer = require("multer");
 const sharp = require("sharp");
 
@@ -10,6 +11,7 @@ router.post("/", async (request, response) => {
   const user = new User(request.body);
   try {
     await user.save();
+    sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
     response.send({ user, token });
   } catch (error) {
@@ -95,6 +97,7 @@ router.delete("/profile", authMiddleware, async (request, response) => {
     // if (!user) return response.status(404).send("Not Found");
     await request.user.remove();
     // await Task.deleteMany({ owner: request.user._id });
+    sendCancelEmail(request.user.email, request.user.name);
     response.json(request.user);
   } catch (error) {
     response.status(400).json(error);
