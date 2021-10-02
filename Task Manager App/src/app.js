@@ -1,5 +1,8 @@
 const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, "../config/.env") });
+require("dotenv").config({
+  path: path.resolve(__dirname, "../config/test.env"),
+});
+// require("dotenv").config();
 require("./db/mongoose");
 const express = require("express");
 const userRouter = require("./routers/user");
@@ -8,16 +11,14 @@ const authMiddleware = require("./middleware/auth");
 //
 const app = express();
 const bodyParser = express.json;
-const port = process.env.PORT;
+// const port = process.env.PORT;
 
 app.use(bodyParser());
 // app.use(authMiddleware);
 app.use("/users", userRouter);
 app.use("/tasks", taskRouter);
 
-app.listen(port, () => {
-  console.log(`Server is up on ${port}`);
-});
+module.exports = app;
 
 // const multer = require("multer");
 // const upload = multer({

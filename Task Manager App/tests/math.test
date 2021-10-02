@@ -1,0 +1,70 @@
+// const {
+//   calculateTip,
+//   celsiusToFahrenheit,
+//   fahrenheitToCelsius,
+//   add,
+// } = require("../src/math");
+// require("jest");
+
+// test("Should calculate total with tip", () => {
+//   const total = calculateTip(10, 0.3);
+//   expect(total).toBe(13);
+// });
+
+// test("Should calculate total with defualt tip:.25", () => {
+//   const total = calculateTip(10);
+//   expect(total).toBe(12.5);
+// });
+
+// test("Should calcualte celsius to fahrenheit", () => {
+//   const temp = celsiusToFahrenheit(29);
+//   expect(temp).toBe(84.2);
+// });
+
+// test("Should calcualte fahrenheit to celsius", () => {
+//   const temp = fahrenheitToCelsius(84.2);
+//   expect(temp).toBe(29);
+// });
+
+// test("Async test demo", () => {
+//   setTimeout(() => {
+//     expect(2).toBe(2);
+//   }, 2000);
+// });
+
+// test("Async test demo done", (done) => {
+//   setTimeout(() => {
+//     expect(2).toBe(2);
+//     done();
+//   }, 2000);
+// });
+
+// test("should add to numbers", (done) => {
+//   add(2, 2)
+//     .then((sum) => {
+//       expect(4).toBe(sum);
+//       done();
+//     })
+//     .catch((e) => {
+//       throw new Error(e);
+//     });
+// });
+
+// test("should add to numbers async/await", async () => {
+//   const sum = await add(20, 20);
+//   expect(40).toBe(sum);
+// });
+
+// test("Should calculate total with tip", () => {
+//   const total = calculateTip(10, 0.3);
+
+//   if (total !== 13) {
+//     throw new Error(`Total tip should be 13. Got ${total}`);
+//   }
+// });
+
+// test("Hello World!", () => {});
+
+// test("This should fail", () => {
+//   throw new Error("Failure!");
+// });
